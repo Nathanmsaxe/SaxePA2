@@ -106,11 +106,50 @@ Data LL<Data>::search_list(int targetKey){
 
 	}
 	Student null;
+	null.data = "";
+	null.key = 0;
 	return null;
 }
 template<class Data>
+
 bool LL<Data>::delete_node(int targetKey){
-	LLnode* temp;
-	temp = this->fwdPtr;
+	LLnode * temp = this->fwdPtr;
+	LLnode * prevPtr = nullptr;
+	LLnode * currentPtr = this->fwdPtr;
+	LLnode * nextPtr = this->fwdPtr->fwdPtr;
+	while(temp!=nullptr){
+		if(currentPtr->theData.key == targetKey){
+			if(prevPtr==nullptr && currentPtr!=nullptr){
+				this->fwdPtr = nextPtr;
+				delete currentPtr;
+				return true;
+			}
+			else if(prevPtr!=nullptr && nextPtr!=nullptr){
+				prevPtr->fwdPtr = nextPtr;
+				delete currentPtr;
+				return true;
+			}
+			else if(nextPtr == nullptr && currentPtr != nullptr){
+				prevPtr->fwdPtr = nullptr;
+				delete currentPtr;
+				return true;
+			}
+			else if(currentPtr == nullptr){
+				string temp = "list empty";
+				throw temp;
+				return false;
+			}
+		}
+
+		prevPtr = temp;
+		currentPtr = temp->fwdPtr;
+		nextPtr = temp->fwdPtr->fwdPtr;
+		temp = temp->fwdPtr;
+
+	}
+	return false;
+
+
+
 
 }
