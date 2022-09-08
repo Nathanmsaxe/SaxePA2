@@ -4,41 +4,46 @@ using namespace std;
 template<class Data>
 LL<Data>::LL(){
 	// TODO Auto-generated constructor stub
-	fwdPtr = nullptr;
+	this->fwdPtr = nullptr;
 }
 template<class Data>
 void LL<Data>::push_front(Data data){
-	LLnode * newNode = new LLnode;
-	LLnode * temp = this->fwdPtr;
-	newNode->theData = data;
-	newNode->fwdPtr = temp;
-	this->fwdPtr = newNode;
+	cout <<"in push front" << endl;
+	LLnode * newNode = new LLnode; //creates new node
+	LLnode * temp; // creates temporary node pointer
+	newNode->theData = data; // stores data in new node
+	temp = this->fwdPtr; // sets temporary node pointer to where header points to
+	this->fwdPtr = newNode; //sets header to point to new node
+	newNode->fwdPtr = temp; // sets new node to point to where the header had pointed to
+
 }
 template<class Data>
 void LL<Data>::push_back(Data data){
-	LLnode* newNode = new LLnode;
+	LLnode * newNode = new LLnode; // creates new node
+	LLnode * temp; // creates a new node pointer
 
-	newNode->theData = data;
+	newNode->fwdPtr = nullptr; // sets fwd pointer in new node to null
 
-	newNode->fwdPtr = nullptr;
-
-	if(this->fwdPtr == nullptr){
-		this->fwdPtr = newNode;
+	newNode->theData = data; // stores data in new node
+	temp = this->fwdPtr; // stores the pointer to where header pointed to
+	if(temp!=nullptr){ // if the pointer points to not null
+		while(temp->fwdPtr!=nullptr){
+			temp = temp->fwdPtr; // traversal
+		}
+		temp->fwdPtr = newNode; // sets the temp pointer to the newly created node
 	}
 	else{
-		LLnode *last = this->fwdPtr;
-		while(last->fwdPtr!=nullptr){
-			last = last->fwdPtr;
-		}
-		last->fwdPtr = newNode;
+		this->fwdPtr = newNode;
 	}
 }
 template<class Data>
 int LL<Data>::list_length(){
+	LLnode * temp;
+	temp = this->fwdPtr;
 	int counter = 0;
-	while(this->fwdPtr != nullptr){
+	while(temp != nullptr){
 		counter++;
-		this->fwdPtr = this->fwdPtr->fwdPtr;
+		temp = temp->fwdPtr;
 	}
 
 	return counter;
@@ -62,12 +67,14 @@ Student LL<Data>::retrieve_back(){
 }
 template<class Data>
 void LL<Data>::display_list(){
+	LLnode * temp;
+	temp = this->fwdPtr;
 	int counter = 0;
-	if(this->fwdPtr!=nullptr){
-		while(this->fwdPtr != nullptr){
+	if(temp!=nullptr){
+		while(temp != nullptr){
 			counter++;
-			cout << "node " << counter << " address -> " << this->fwdPtr << " Student Name:" << this->fwdPtr->theData.data << " Student ID: " << this->fwdPtr->theData.key << endl;
-			this->fwdPtr = this->fwdPtr->fwdPtr;
+			cout << "node " << counter << " address -> " << temp << " Student Name:" << temp->theData.data << " Student ID: " << temp->theData.key << endl;
+			temp = temp->fwdPtr;
 		}
 	}
 	else{
@@ -76,44 +83,34 @@ void LL<Data>::display_list(){
 }
 template<class Data>
 void LL<Data>::destroy_list(){
-	while(this->fwdPtr!=nullptr){
-		this->fwdPtr = this->fwdPtr->fwdPtr;
-		delete this;
+	LLnode * temp = this->fwdPtr; //creating a new pointer and setting it to where the header points to
+	while(temp != nullptr){
+		temp = this->fwdPtr->fwdPtr;
+		delete this->fwdPtr;
+		this->fwdPtr = temp;
+
 	}
 }
 template<class Data>
 Data LL<Data>::search_list(int targetKey){
-	while(this->fwdPtr!=nullptr){
-		if(this->fwdPtr->theData.key == targetKey){
-			Student temp;
-			temp.data = this->fwdPtr->theData.data;
-			temp.key = this->fwdPtr->theData.key;
-			return temp;
+	LLnode* temp;
+	temp = this->fwdPtr;
+	while(temp!=nullptr){
+		if(temp->theData.key == targetKey){
+			cout << "Student Found!" << endl;
+			return temp->fwdPtr->theData;
 		}
 		else{
-			Student temp;
-			temp.data = "";
-			temp.key = 0;
-			return temp;
+			temp = temp->fwdPtr;
 		}
+
 	}
-	Student temp;
-	temp.data = "";
-	temp.key = 0;
-	return temp;
+	Student null;
+	return null;
 }
 template<class Data>
 bool LL<Data>::delete_node(int targetKey){
-	while(this->fwdPtr!=nullptr){
-		if(this->fwdPtr->fwdPtr->theData.key == targetKey){
-			LLnode * tempptr = this->fwdPtr->fwdPtr;
-			delete this->fwdPtr->fwdPtr;
-			this->fwdPtr = tempptr;
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
-	return false;
+	LLnode* temp;
+	temp = this->fwdPtr;
+
 }
