@@ -28,7 +28,9 @@ public:
 	Student retrieve_front();
 	Student retrieve_back();
 	void display_list();
+	void destroy_list();
+	Data search_list(int);
+	bool delete_node(int);
 };
 
 #endif /* LL_H_ */
-
